@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    
+    <!-- Tracking search widget -->
+    <div class="card p-4 mb-4">
+      <h4 class="card-title mb-3">Track Courier Shipment</h4>
+      <form action="{{ url_for('track_search') }}" method="GET">
+        <div class="input-group">
+          <input type="text" name="id" class="form-control" placeholder="Enter Tracking ID (e.g. 1)" value="{{ tracking_id if tracking_id else '' }}" required>
+          <button class="btn btn-primary" type="submit">Track</button>
+        </div>
+      </form>
+    </div>
+
+    {% if tracking_id %}
+      {% if courier %}
+        <!-- Details Card -->
+        <div class="card p-4">
+          <div class="border-bottom pb-3 mb-3">
+            <h3>Shipment #{{ courier.id }} Details</h3>
+            <span class="badge bg-primary fs-6">Status: {{ courier.status }}</span>
+          </div>
+
+          <!-- Timeline -->
+          <div class="my-4">
+            <h5>Status History:</h5>
+            {% set statuses = ['Pending', 'Dispatched', 'In Transit', 'Out for Delivery', 'Delivered'] %}
+            {% set active_index = statuses.index(courier.status) if courier.status in statuses else 0 %}
+            
+            <div class="timeline-step {% if active_index == 0 %}active{% elif active_index > 0 %}completed{% endif %}">
+              <strong>Pending</strong> - Package registered in the system.
+            </div>
+            
+            <div class="timeline-step {% if active_index == 1 %}active{% elif active_index > 1 %}completed{% endif %}">
+              <strong>Dispatched</strong> - Package has left the origin branch.
+            </div>
+            
+            <div class="timeline-step {% if active_index == 2 %}active{% elif active_index > 2 %}completed{% endif %}">
+              <strong>In Transit</strong> - Package is on its way.
+            </div>
+            
+            <div class="timeline-step {% if active_index == 3 %}active{% elif active_index > 3 %}completed{% endif %}">
+              <strong>Out for Delivery</strong> - Package is with the delivery person.
+            </div>
+            
+            <div class="timeline-step {% if active_index == 4 %}active{% elif active_index > 4 %}completed{% endif %}">
+              <strong>Delivered</strong> - Package has been delivered successfully.
+            </div>
+          </div>
+
+          <!-- Package Details -->
+          <div class="row pt-3">
+            <div class="col-md-6 mb-3">
+              <strong>Sender:</strong> {{ courier.sender }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Receiver:</strong> {{ courier.receiver }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Parcel Type:</strong> {{ courier.parcel_type }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Weight:</strong> {{ courier.weight }} kg
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Charges:</strong> ${{ courier.charges }}
+            </div>
+            <div class="col-md-6 mb-3">
+              <strong>Created Date:</strong> {{ courier.created_at.strftime('%Y-%m-%d %H:%M') }}
+            </div>
+          </div>
+
+          <!-- Proof Image -->
+          {% if courier.image %}
+            <div class="mt-4 border-top pt-3 text-center">
+              <h5>Courier Proof Image:</h5>
+              <img src="{{ url_for('static', filename='uploads/' + courier.image) }}" alt="Proof Image" class="img-fluid rounded border mt-2" style="max-height: 250px;">
+            </div>
+          {% endif %}
+        </div>
+      {% else %}
+        <!-- Not Found -->
+        <div class="alert alert-danger text-center">
+          <h4>Shipment Not Found</h4>
+          <p class="mb-0">We could not find a courier with tracking ID: <strong>{{ tracking_id }}</strong></p>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

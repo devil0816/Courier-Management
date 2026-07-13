@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center py-5">
+  <div class="col-md-6">
+    <h1 class="display-5 fw-bold mb-3">Courier Courier Express</h1>
+    <p class="lead text-muted mb-4">
+      Welcome to the Courier Management System. This system helps you to manage, send, and track courier parcels quickly and easily.
+    </p>
+    
+    <!-- Tracking Box -->
+    <div class="card p-4">
+      <h5 class="card-title mb-3">Track Your Shipment</h5>
+      <form action="{{ url_for('track_search') }}" method="GET">
+        <div class="input-group">
+          <input type="text" name="id" class="form-control" placeholder="Enter Tracking ID (e.g. 1)" required>
+          <button class="btn btn-primary" type="submit">Track</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="col-md-6 text-center">
+    <div class="p-5 bg-light border rounded-3">
+      <h3>Quick Operations</h3>
+      <p class="text-muted">Register an account to log in and manage your courier items.</p>
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-success btn-lg">Go to Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-2">Register Now</a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Partner Login</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

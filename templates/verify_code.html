@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-4">
+      <h3 class="card-title text-center mb-2">Verify Code</h3>
+      <p class="text-muted text-center mb-4">A 6-digit verification code has been sent to your email <strong>{{ session.get('reset_email') }}</strong>. Please enter the code below to proceed.</p>
+      
+      <form action="{{ url_for('verify_code') }}" method="POST">
+        <div class="mb-3">
+          <label for="code" class="form-label">Verification Code</label>
+          <input type="text" class="form-control text-center fs-4 fw-bold" id="code" name="code" placeholder="123456" maxlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Verify Code</button>
+      </form>
+       <div class="text-center mt-3">
+        <p class="mb-0"><a href="{{ url_for('forgot_password') }}">Resend Code</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

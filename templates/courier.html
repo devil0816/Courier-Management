@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card p-4">
+      <h3 class="mb-4">{{ 'Edit Courier' if courier else 'Add New Courier' }}</h3>
+      
+      <form action="{{ url_for('edit_courier', id=courier.id) if courier else url_for('add_courier') }}" method="POST" enctype="multipart/form-data">
+        
+        <div class="mb-3">
+          <label for="sender" class="form-label">Sender Name</label>
+          <input type="text" class="form-control" id="sender" name="sender" value="{{ courier.sender if courier else '' }}" required>
+        </div>
+        
+        <div class="mb-3">
+          <label for="receiver" class="form-label">Receiver Name</label>
+          <input type="text" class="form-control" id="receiver" name="receiver" value="{{ courier.receiver if courier else '' }}" required>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="parcel_type" class="form-label">Parcel Type</label>
+            <select class="form-select" id="parcel_type" name="parcel_type" required>
+              <option value="" disabled {{ 'selected' if not courier else '' }}>Select Category</option>
+              <option value="Documents" {{ 'selected' if courier and courier.parcel_type == 'Documents' else '' }}>Documents</option>
+              <option value="Standard Package" {{ 'selected' if courier and courier.parcel_type == 'Standard Package' else '' }}>Standard Package</option>
+              <option value="Express Delivery" {{ 'selected' if courier and courier.parcel_type == 'Express Delivery' else '' }}>Express Delivery</option>
+              <option value="Fragile Items" {{ 'selected' if courier and courier.parcel_type == 'Fragile Items' else '' }}>Fragile Items</option>
+            </select>
+          </div>
+          
+          <div class="col-md-3 mb-3">
+            <label for="weight" class="form-label">Weight (kg)</label>
+            <input type="number" step="0.01" class="form-control" id="weight" name="weight" value="{{ courier.weight if courier else '' }}" required>
+          </div>
+          
+          <div class="col-md-3 mb-3">
+            <label for="charges" class="form-label">Charges ($)</label>
+            <input type="number" step="0.01" class="form-control" id="charges" name="charges" value="{{ courier.charges if courier else '' }}" required>
+          </div>
+        </div>
+        <div class=" mb-3">
+            <label for="address" class="form-label">Address Line 1</label>
+            <input type="text" class="form-control" id="address" name="address" value="{{ courier.address if courier else '' }}" required>
+        </div>
+        <div class=" mb-3">
+            <label for="address_2" class="form-label">Address Line 2</label>
+            <input type="text" class="form-control" id="address_2" name="address_2" value="{{ courier.address_2 if courier else '' }}">
+        </div>
+        
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" name="status" required>
+            <option value="Pending" {{ 'selected' if not courier or courier.status == 'Pending' else '' }}>Pending</option>
+            <option value="Dispatched" {{ 'selected' if courier and courier.status == 'Dispatched' else '' }}>Dispatched</option>
+            <option value="In Transit" {{ 'selected' if courier and courier.status == 'In Transit' else '' }}>In Transit</option>
+            <option value="Out for Delivery" {{ 'selected' if courier and courier.status == 'Out for Delivery' else '' }}>Out for Delivery</option>
+            <option value="Delivered" {{ 'selected' if courier and courier.status == 'Delivered' else '' }}>Delivered</option>
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="image" class="form-label">Upload Courier Photo (Optional)</label>
+          <input type="file" class="form-control" id="image" name="image" accept="image/*">
+          {% if courier and courier.image %}
+            <div class="mt-2">
+              <p class="mb-1 text-muted" style="font-size: 0.85rem;">Current Photo:</p>
+              <img src="{{ url_for('static', filename='uploads/' + courier.image) }}" alt="Courier Image" style="max-height: 100px; border-radius: 4px;">
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">{{ 'Update Courier' if courier else 'Add Courier' }}</button>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}
