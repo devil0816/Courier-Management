@@ -30,8 +30,8 @@ A web-based Courier Management System built with Flask and SQLite. The applicati
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/devil0816/Mood-Based-Music-Recommender.git
-   cd Mood-Based-Music-Recommender
+   git clone https://github.com/devil0816/Courier-Management.git
+   cd Courier-Management
    ```
 
 2. **Set Up a Virtual Environment** (Optional but recommended):
